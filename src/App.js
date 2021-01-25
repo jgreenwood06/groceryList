@@ -98,7 +98,11 @@ class App extends Component {
     const filteredPendingArray = this.state.pendingArray.filter(listitems => listitems.isPending === true)
     const priceArray = filteredPendingArray.map((item) => item.price * item.quantity)
     //const priceArray = this.state.pendingArray.map((item) => item.price)
-    const sumPrice = priceArray.reduce(reducer)
+    var sumPrice = 0.0
+    if (priceArray.length > 0){
+      sumPrice = priceArray.reduce(reducer)
+    }
+
     if (this.state.totalPrice !== sumPrice){
       this.setState({
         totalPrice: sumPrice
@@ -190,6 +194,53 @@ class App extends Component {
     })
   }
 
+  sortByCategory(array){
+    var sortedArray = array.sort(function(a,b) {
+      var categoryA = a.category.toUpperCase();
+      var categoryB = b.category.toUpperCase();
+      var nameA = a.name.toUpperCase();
+      var nameB = b.name.toUpperCase();
+      if (a.isPending === true && b.isPending === true){
+        if (categoryA < categoryB){
+          return -1;
+        }
+        if (categoryA > categoryB) {
+          return 1;
+        }
+        if (categoryA == categoryB){
+          if (nameA < nameB){
+            return -1
+          }
+          if (nameA > nameB){
+            return 1
+          }
+          return 0
+        }
+      }
+    })
+    var filteredArray = sortedArray.filter(items => items.name.includes(document.getElementById('nameTextField').value))
+    return filteredArray
+  }
+
+  sortByName(array){
+    var sortedArray = array.sort(function(a,b) {
+      var nameA = a.name.toUpperCase();
+      var nameB = b.name.toUpperCase();
+      if (a.isPending === false && b.isPending === false){
+        if (nameA < nameB){
+          return -1
+        }
+        if (nameA > nameB){
+          return 1
+        }
+        return 0
+      }
+    })
+
+    var filteredArray = sortedArray.filter(items => items.name.includes(document.getElementById('nameTextField').value))
+    return filteredArray
+  }
+
   render() {
     console.log(this.state.listitems)
     this.updateTotalPrice()
@@ -228,7 +279,7 @@ class App extends Component {
 
             </thead>
             <tbody>
-              <PendingItems listitems={this.state.pendingArray} updateIsPending={this.updateIsPending}/>
+              <PendingItems listitems={this.sortByCategory(this.state.pendingArray)} updateIsPending={this.updateIsPending}/>
               </tbody>
               <tr>
                 <td></td>
@@ -259,7 +310,7 @@ class App extends Component {
                 <td></td>
               </tr>
             </thead>
-              <CompletedItems listitems={this.state.pendingArray} updateIsPending={this.updateIsPending}/>
+              <CompletedItems listitems={this.sortByName(this.state.pendingArray)} updateIsPending={this.updateIsPending}/>
             </table>
           </div>
         </div>

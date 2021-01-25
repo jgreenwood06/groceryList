@@ -4,17 +4,8 @@ import PropTypes from 'prop-types';
 
 
 class PendingItems extends Component {
-
-/*
-markAndToggle = index => {
-  this.props.markNotPending(index);
-  this.toggleCheckbox;
-}
-*/
-
   render() {
-
-    return this.props.listitems.filter(listitems => listitems.isPending === true).map((item, index) => { return(
+    return this.props.listitems.filter(listitems => listitems.isPending === true).map((item, index) => (
         <tr>
           <td>
             <input type="checkbox" checked={!item.isPending} onChange={()=>this.props.updateIsPending(this.props.listitems.findIndex(obj => obj.name === item.name))} />
@@ -32,10 +23,8 @@ markAndToggle = index => {
             {item.quantity}
           </td>
         </tr>
-      )
-  }
 
-    );
+    ));
   }
 }
 
