@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PendingItems from './PendingItems.js'
 import CompletedItems from './CompletedItems.js'
-import ListItem from './ListItem.js'
 import './App.css';
 
 class App extends Component {
