@@ -218,7 +218,15 @@ class App extends Component {
         }
       }
     })
-    var filteredArray = sortedArray.filter(items => items.name.includes(document.getElementById('nameTextField').value))
+    var filteredArray = sortedArray
+    var element = document.getElementById('nameTextField')
+    var fieldValue = null
+    if (element != null){
+      fieldValue = document.getElementById('nameTextField').value
+    }
+    if (fieldValue != null){
+      filteredArray = sortedArray.filter(items => items.name.includes(fieldValue))
+    }
     return filteredArray
   }
 
@@ -237,7 +245,15 @@ class App extends Component {
       }
     })
 
-    var filteredArray = sortedArray.filter(items => items.name.includes(document.getElementById('nameTextField').value))
+    var filteredArray = sortedArray
+    var element = document.getElementById('nameTextField')
+    var fieldValue = null
+    if (element != null){
+      fieldValue = document.getElementById('nameTextField').value
+    }
+    if (fieldValue != null){
+      filteredArray = sortedArray.filter(items => items.name.includes(fieldValue))
+    }
     return filteredArray
   }
 
