@@ -24,15 +24,7 @@ class CompletedItems extends Component {
   }
 }
 
-const buttonStyle = {
-  background: '#ff0000',
-  color: '#fff',
-  border: 'none',
-  padding: '2px 2px',
-  borderRadius: '5%',
-  cursor: 'pointer',
-  float: 'right'
-}
+
 
 export default CompletedItems;
 

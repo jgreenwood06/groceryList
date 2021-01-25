@@ -48,7 +48,14 @@ class App extends Component {
         quantity: 1,
         isPending: false
       }
-    ]
+    ],
+    userFields: {
+      name: 'default',
+      category: 'default',
+      price: 0.0,
+      quantity: 0,
+      isPending: true
+    }
   }
 /*
   moveToPending = (index) =>{
@@ -74,9 +81,11 @@ class App extends Component {
   constructor(props){
     super(props);
     this.updateIsPending = this.updateIsPending.bind(this);
-
-
-
+    this.addItem = this.addItem.bind(this)
+    this.updateUserNameField = this.updateUserNameField.bind(this)
+    this.updateUserCategoryField = this.updateUserCategoryField.bind(this)
+    this.updateUserPriceField = this.updateUserPriceField.bind(this)
+    this.updateUserQuantityField = this.updateUserQuantityField.bind(this)
   }
 
   updateIsPending(index) {
@@ -92,25 +101,95 @@ class App extends Component {
 
   }
 
+  addItem(){
+    this.setState({
+      pendingArray: this.state.pendingArray.concat(this.state.userFields)
+    })
+  }
 
+  updateUserNameField(value){
+    this.setState({
+      userFields: {
+        name: value,
+        category: this.state.userFields.category,
+        price: this.state.userFields.price,
+        quantity: this.state.userFields.quantity,
+        isPending: true
+      }
+    })
+  }
+
+  updateUserCategoryField(value){
+    this.setState({
+      userFields: {
+        name: this.state.userFields.name,
+        category: value,
+        price: this.state.userFields.price,
+        quantity: this.state.userFields.quantity,
+        isPending: true
+      }
+    })
+  }
+
+  updateUserPriceField(value){
+    this.setState({
+      userFields: {
+        name: this.state.userFields.name,
+        category: this.state.userFields.category,
+        price: value,
+        quantity: this.state.userFields.quantity,
+        isPending: true
+      }
+    })
+  }
+
+  updateUserQuantityField(value){
+    this.setState({
+      userFields: {
+        name: this.state.userFields.name,
+        category: this.state.userFields.category,
+        price: this.state.userFields.price,
+        quantity: value,
+        isPending: true
+      }
+    })
+  }
 
   render() {
     console.log(this.state.listitems)
     return (
       <div className="App">
-        <h1>Grocery List</h1>
+        <h1 style ={{padding: '0px 120px'}}>Grocery List</h1>
 
         <div class="flexbox-container">
           <div class="pendingColumn">
           <table class="pendingTable" cellpadding="4px">
             <thead>
               <tr>
-                <td>    </td>
+                <td>                     </td>
                 <td>Item</td>
                 <td>Category</td>
                 <td>Price</td>
                 <td>Quantity</td>
+                </tr>
+              <tr>
+                <td class="checkBoxColumn">
+                  <button style={buttonStyle} onClick={this.addItem} > Add Item </button>
+                </td>
+                <td>
+                  <input type= "text" onChange={event => this.updateUserNameField(event.target.value)} placeholder= "Item Name" style ={{width: '100%'}}/>
+                </td>
+                <td>
+                  <input type= "text" onChange={event => this.updateUserCategoryField(event.target.value)} placeholder= "Category" style ={{width: '100%'}}/>
+                </td>
+                <td>
+                  <input type= "text" onChange={event => this.updateUserPriceField(event.target.value)} placeholder= "Price" style ={{width: '100%'}}/>
+                </td>
+                <td>
+                  <input type= "text" onChange={event => this.updateUserQuantityField(event.target.value)} placeholder= "Quantity" style ={{width: '100%'}}/>
+                </td>
               </tr>
+
             </thead>
             <tbody>
               <PendingItems listitems={this.state.pendingArray} updateIsPending={this.updateIsPending}/>
@@ -127,6 +206,14 @@ class App extends Component {
                 <td>Price</td>
                 <td>Quantity</td>
               </tr>
+
+              <tr>
+                <td>    </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
             </thead>
               <CompletedItems listitems={this.state.pendingArray} updateIsPending={this.updateIsPending}/>
             </table>
@@ -135,6 +222,17 @@ class App extends Component {
       </div>
     );
   }
+}
+
+const buttonStyle = {
+  display: 'inline-block',
+  background: '#A9A9A9',
+  border: 'none',
+  padding: '2px 2px',
+  borderRadius: '20%',
+  cursor: 'pointer',
+  width:'5000',
+  height: '100%',
 }
 
 export default App;

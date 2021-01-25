@@ -18,6 +18,12 @@ code {
   text-align: right;
 }
 
+.checkBoxColumn{
+  display: flex;
+  flex: 5;
+  text-align: left;
+}
+
 .completedColumn{
   display: flex;
   flex: 1;
