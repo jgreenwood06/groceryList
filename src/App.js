@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PendingItems from './PendingItems.js'
 import CompletedItems from './CompletedItems.js'
-import ListItem from './ListItem.js'
 import './App.css';
 
 class App extends Component {
@@ -55,22 +54,30 @@ class App extends Component {
   moveToPending = (index) =>{
     this.completedArray.splice(index,1);
   }
-  */
+
 
   constructor(props){
     super(props);
     this.markNotPending = this.markNotPending.bind(this);
-    /*
+
     this.forceUpdateHandler = this.forceUpdateHandler.bind(this);
-    */
+
   }
 
-  /*
+
   forceUpdateHandler(){
     this.forceUpdate();
     console.log('update forced!');
   }
   */
+
+  constructor(props){
+    super(props);
+    this.updateIsPending = this.updateIsPending.bind(this);
+
+
+
+  }
 
   updateIsPending(index) {
     const isIndexPending = this.state.pendingArray[index].isPending
@@ -106,7 +113,7 @@ class App extends Component {
               </tr>
             </thead>
             <tbody>
-              <PendingItems listitems={this.state.pendingArray} markNotPending={this.updateIsPending}/>
+              <PendingItems listitems={this.state.pendingArray} updateIsPending={this.updateIsPending}/>
               </tbody>
             </table>
           </div>
@@ -121,7 +128,7 @@ class App extends Component {
                 <td>Quantity</td>
               </tr>
             </thead>
-              <CompletedItems listitems={this.state.pendingArray} markNotPending={this.updateIsPending}/>
+              <CompletedItems listitems={this.state.pendingArray} updateIsPending={this.updateIsPending}/>
             </table>
           </div>
         </div>

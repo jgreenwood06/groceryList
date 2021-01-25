@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ListItem from './ListItem.js'
-import ListItemForPending from './ListItemForPending.js'
 import PropTypes from 'prop-types';
 
 
