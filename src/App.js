@@ -53,10 +53,13 @@ class App extends Component {
       name: 'default',
       category: 'default',
       price: 0.0,
-      quantity: 0,
+      quantity: 1,
       isPending: true
     },
-    totalPrice: 0.0
+    totalPrice: 0.0,
+    isEditable: false,
+    editButtonText: 'Edit Items'
+
   }
 /*
   moveToPending = (index) =>{
@@ -90,7 +93,22 @@ class App extends Component {
     this.updateUserPriceField = this.updateUserPriceField.bind(this);
     this.updateUserQuantityField = this.updateUserQuantityField.bind(this);
     this.updateTotalPrice = this.updateTotalPrice.bind(this);
+    this.toggleEditable = this.toggleEditable.bind(this);
+    this.editNameField = this.editNameField.bind(this);
+    this.editCategoryField = this.editCategoryField.bind(this);
+    this.editPriceField = this.editPriceField.bind(this);
+    this.editQuantityField = this.editQuantityField.bind(this);
 
+
+  }
+
+  roundOff(n, p) {
+      const n1 = n * Math.pow(10, p + 1);
+      const n2 = Math.floor(n1 / 10);
+      if (n1 >= (n2 * 10 + 5)) {
+          return (n2 + 1) / Math.pow(10, p);
+      }
+      return n2 / Math.pow(10, p);
   }
 
   updateTotalPrice(){
@@ -134,14 +152,67 @@ class App extends Component {
 
   addItem(){
     console.log(this.state.userFields)
-    this.setState({
-      pendingArray: this.state.pendingArray.concat(this.state.userFields),
-      //totalPrice: this.state.pendingArray.filter(listitems => listitems.isPending === true)
-    })
+    if (this.state.userFields.name != 'default'){
+      this.setState({
+        pendingArray: this.state.pendingArray.concat(this.state.userFields),
+        userFields: {
+          name: 'default',
+          category: 'default',
+          price: 0.0,
+          quantity: 1,
+          isPending: true
+        }
+        //totalPrice: this.state.pendingArray.filter(listitems => listitems.isPending === true)
+      })
+    }
     document.getElementById('nameTextField').value = ''
     document.getElementById('categoryTextField').value = ''
     document.getElementById('priceTextField').value = ''
     document.getElementById('quantityTextField').value = ''
+  }
+
+  editNameField(value, index){
+    var tempPendingArray = this.state.pendingArray
+    tempPendingArray[index].name = value
+    tempPendingArray[index].category = document.getElementById('categoryTextFieldPending'+index).value
+    tempPendingArray[index].price = document.getElementById('priceTextFieldPending'+index).value
+    tempPendingArray[index].quantity = document.getElementById('quantityTextFieldPending'+index).value
+    this.setState({
+      pendingArray: tempPendingArray
+    })
+  }
+
+  editCategoryField(value, index){
+    var tempPendingArray = this.state.pendingArray
+    tempPendingArray[index].name = document.getElementById('nameTextFieldPending'+index).value
+    tempPendingArray[index].category = value
+    tempPendingArray[index].price = document.getElementById('priceTextFieldPending'+index).value
+    tempPendingArray[index].quantity = document.getElementById('quantityTextFieldPending'+index).value
+    this.setState({
+      pendingArray: tempPendingArray
+    })
+  }
+
+  editPriceField(value, index){
+    var tempPendingArray = this.state.pendingArray
+    tempPendingArray[index].name = document.getElementById('nameTextFieldPending'+index).value
+    tempPendingArray[index].category = document.getElementById('categoryTextFieldPending'+index).value
+    tempPendingArray[index].price = value
+    tempPendingArray[index].quantity = document.getElementById('quantityTextFieldPending'+index).value
+    this.setState({
+      pendingArray: tempPendingArray
+    })
+  }
+
+  editQuantityField(value, index){
+    var tempPendingArray = this.state.pendingArray
+    tempPendingArray[index].name = document.getElementById('nameTextFieldPending'+index).value
+    tempPendingArray[index].category = document.getElementById('categoryTextFieldPending'+index).value
+    tempPendingArray[index].price = document.getElementById('priceTextFieldPending'+index).value
+    tempPendingArray[index].quantity = value
+    this.setState({
+      pendingArray: tempPendingArray
+    })
   }
 
   updateUserNameField(value){
@@ -194,7 +265,8 @@ class App extends Component {
     })
   }
 
-  sortByCategory(array){
+  sortArray(array){
+    if (this.state.isEditable == false){
     var sortedArray = array.sort(function(a,b) {
       var categoryA = a.category.toUpperCase();
       var categoryB = b.category.toUpperCase();
@@ -217,23 +289,11 @@ class App extends Component {
           return 0
         }
       }
-    })
-    var filteredArray = sortedArray
-    var element = document.getElementById('nameTextField')
-    var fieldValue = null
-    if (element != null){
-      fieldValue = document.getElementById('nameTextField').value
-    }
-    if (fieldValue != null){
-      filteredArray = sortedArray.filter(items => items.name.includes(fieldValue))
-    }
-    return filteredArray
-  }
-
-  sortByName(array){
-    var sortedArray = array.sort(function(a,b) {
-      var nameA = a.name.toUpperCase();
-      var nameB = b.name.toUpperCase();
+      //if mismatched, put pending first
+      if (a.isPending === true && b.isPending === false){
+        return -1
+      }
+      //both not pending, sort by name
       if (a.isPending === false && b.isPending === false){
         if (nameA < nameB){
           return -1
@@ -244,7 +304,6 @@ class App extends Component {
         return 0
       }
     })
-
     var filteredArray = sortedArray
     var element = document.getElementById('nameTextField')
     var fieldValue = null
@@ -256,6 +315,28 @@ class App extends Component {
     }
     return filteredArray
   }
+  else{
+    return array
+  }
+  }
+
+  toggleEditable(){
+    var currentIsEditable = this.state.isEditable
+    console.log(currentIsEditable)
+    if (this.state.isEditable == false){
+      this.setState({
+        isEditable: !currentIsEditable,
+        editButtonText: 'Finish Editing'
+      })
+    }
+    else{
+      this.setState({
+        isEditable: !currentIsEditable,
+        editButtonText: 'Edit Items'
+      })
+    }
+  }
+
 
   render() {
     console.log(this.state.listitems)
@@ -266,10 +347,12 @@ class App extends Component {
 
         <div class="flexbox-container">
           <div class="pendingColumn">
-          <table class="pendingTable" cellpadding="4px">
+          <table class="pendingTable" cellPadding="4px">
             <thead>
               <tr>
-                <td>                     </td>
+                <td>
+
+                </td>
                 <td>Item</td>
                 <td>Category</td>
                 <td>Price</td>
@@ -295,20 +378,29 @@ class App extends Component {
 
             </thead>
             <tbody>
-              <PendingItems listitems={this.sortByCategory(this.state.pendingArray)} updateIsPending={this.updateIsPending}/>
+              <PendingItems canEdit={this.state.isEditable}
+              listitems={this.sortArray(this.state.pendingArray)}
+              updateIsPending={this.updateIsPending}
+              editNameField={this.editNameField}
+              editCategoryField={this.editCategoryField}
+              editPriceField={this.editPriceField}
+              editQuantityField={this.editQuantityField}
+              />
               </tbody>
               <tr>
                 <td></td>
-                <td></td>
+                <td>
+                <button style={buttonStyle} onClick={this.toggleEditable} > {this.state.editButtonText} </button>
+                </td>
                 <td style={{textAlign: 'right'}}>Total:</td>
                 <td>
-                  {this.state.totalPrice}
+                  ${this.roundOff(this.state.totalPrice,2).toFixed(2)}
                 </td>
               </tr>
             </table>
           </div>
           <div class="completedColumn">
-          <table class='completedTable' cellpadding="4px">
+          <table class='completedTable' cellPadding="4px">
             <thead>
               <tr>
                 <td>    </td>
@@ -326,7 +418,7 @@ class App extends Component {
                 <td></td>
               </tr>
             </thead>
-              <CompletedItems listitems={this.sortByName(this.state.pendingArray)} updateIsPending={this.updateIsPending}/>
+              <CompletedItems listitems={this.sortArray(this.state.pendingArray)} updateIsPending={this.updateIsPending}/>
             </table>
           </div>
         </div>
@@ -340,7 +432,7 @@ const buttonStyle = {
   background: '#A9A9A9',
   border: 'none',
   padding: '2px 2px',
-  borderRadius: '20%',
+  borderRadius: '10%',
   cursor: 'pointer',
   width:'5000',
   height: '100%',
